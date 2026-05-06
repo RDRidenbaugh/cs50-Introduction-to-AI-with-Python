@@ -108,16 +108,16 @@ def shortest_path(source, target):
         
         # Removing a node and checking for solution
         node = frontier.remove()
+        
+        # Checking for solution
         if node.state == target:
-            movies = []
-            stars = []
+            pairs = []
             while node.parent is not None:
-                movies.append(node.action)
-                stars.append(node.state)
-            movies.reverse()
-            stars.reverse()
-            path = (movies, stars)
-            return path
+                pairs.append((node.action, node.state))
+                node = node.parent
+            pairs.reverse()
+            print(pairs)
+            return pairs
 
         # Mark node as explored
         explored.add(node.state)
