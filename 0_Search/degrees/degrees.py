@@ -125,7 +125,7 @@ def shortest_path(source, target):
         # Add co-stars to the frontier
         for m, s in neighbors_for_person(node.state):
             if not frontier.contains_state(s) and s not in explored:
-                child = Node(state=s, parent = node, action=m)
+                child = Node(state=s, parent=node, action=m)
                 frontier.add(child)
     
 
