@@ -42,7 +42,7 @@ def player(board):
     if board == initial_state():
         return "X"
     else:
-        if parse_XO(board) == "X"
+        if parse_XO(board) == "X":
             return "X"
         else:
             return "O"
@@ -55,8 +55,9 @@ def actions(board):
     actions = set()
     for i, l in enumerate(board):
         for j, s in enumerate(l):
-            pass
-    raise NotImplementedError
+            if s == None:
+                actions.add((i,j))
+    return actions
 
 
 def result(board, action):
