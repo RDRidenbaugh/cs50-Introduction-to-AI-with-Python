@@ -116,7 +116,6 @@ def shortest_path(source, target):
                 pairs.append((node.action, node.state))
                 node = node.parent
             pairs.reverse()
-            print(pairs)
             return pairs
 
         # Mark node as explored
