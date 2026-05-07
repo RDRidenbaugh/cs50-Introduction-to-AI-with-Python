@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+from copy import deepcopy
 
 X = "X"
 O = "O"
@@ -17,36 +18,25 @@ def initial_state():
             [EMPTY, EMPTY, EMPTY]]
 
 
-def parse_XO(board):
-    """
-    Identifies the the number of X's and O's already played.
-    """
-    nX = 0
-    nO = 0
-    for l in board:
-        for s in l:
-            if s == X:
-                nX = nX + 1
-            elif s == O:
-                nO = nO + 1
-    if nX == nO:
-        return "X"
-    else:
-        return "O"
-
-
 def player(board):
     """
     Returns player who has the next turn on a board.
     """
+    n_X = 0
+    n_O = 0
     if board == initial_state():
         return "X"
+    for l in board:
+        for s in l:
+            if s == X:
+                n_X = n_X + 1
+            elif s == O:
+                n_O = n_O + 1
+    if n_X == n_O:
+        return "X"
     else:
-        if parse_XO(board) == "X":
-            return "X"
-        else:
-            return "O"
-
+        return "O"
+        
 
 def actions(board):
     """
@@ -64,14 +54,112 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    copy_board=deepcopy(board)
+    if player(board) == "X":
+        copy_board[action[0]][action[1]] = "X"
+    else:
+        copy_board[action[0]][action[1]] = "O"
+    return copy_board
 
 
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
+    # Horizontal win conditions for player X.
+    try:    
+        if board[0][0]+board[0][1]+board[0][2] == "XXX":
+            return X
+    except TypeError:
+        pass
+    try:    
+        if board[1][0]+board[1][1]+board[1][2] == "XXX":
+            return X
+    except TypeError:
+        pass
+    try:    
+        if board[2][0]+board[2][1]+board[2][2] == "XXX":
+            return X
+    except TypeError:
+        pass
+    
+    # Horizontal win conditions for player O
+    try:    
+        if board[0][0]+board[0][1]+board[0][2] == "OOO":
+            return O
+    except TypeError:
+        pass
+    try:    
+        if board[1][0]+board[1][1]+board[1][2] == "OOO":
+            return O
+    except TypeError:
+        pass
+    try:    
+        if board[2][0]+board[2][1]+board[2][2] == "OOO":
+            return O
+    except TypeError:
+        pass
+    
+    # Vertical win conditions for player X.
+    try:    
+        if board[0][0]+board[1][0]+board[2][0] == "XXX":
+            return X
+    except TypeError:
+        pass
+    try:    
+        if board[0][1]+board[1][1]+board[2][1] == "XXX":
+            return X
+    except TypeError:
+        pass
+    try:    
+        if board[0][2]+board[1][2]+board[2][2] == "XXX":
+            return X
+    except TypeError:
+        pass
+    
+    # Vertical win conditions for player O.
+    try:    
+        if board[0][0]+board[1][0]+board[2][0] == "OOO":
+            return O
+    except TypeError:
+        pass
+    try:    
+        if board[0][1]+board[1][1]+board[2][1] == "OOO":
+            return O
+    except TypeError:
+        pass
+    try:    
+        if board[0][2]+board[1][2]+board[2][2] == "OOO":
+            return O
+    except TypeError:
+        pass
+    
+    # Diagonal win conditions for player X.
+    try:    
+        if board[0][0]+board[1][1]+board[2][2] == "XXX":
+            return X
+    except TypeError:
+        pass
+    try:    
+        if board[0][2]+board[1][1]+board[2][0] == "XXX":
+            return X
+    except TypeError:
+        pass
+
+    # Diagonal win conditions for player X.
+    try:    
+        if board[0][0]+board[1][1]+board[2][2] == "OOO":
+            return O
+    except TypeError:
+        pass
+    try:    
+        if board[0][2]+board[1][1]+board[2][0] == "OOO":
+            return O
+    except TypeError:
+        pass
+    
+    # No winner or a draw.
+    return None
 
 
 def terminal(board):
