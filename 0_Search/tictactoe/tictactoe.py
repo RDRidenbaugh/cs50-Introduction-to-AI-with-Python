@@ -11,7 +11,7 @@ EMPTY = None
 
 def initial_state():
     """
-    Returns starting state of the board.
+    Returns starting board of the board.
     """
     return [[EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
@@ -180,7 +180,7 @@ def utility(board):
     """
     if winner(board) == "X":
         return 1
-    elif winner(board) == "O"
+    elif winner(board) == "O":
         return -1
     else:
         return 0
@@ -190,4 +190,59 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+    if player(board) == X:
+        for action in actions(board):
+            if winner(result(board, action)) == "X":
+                return action
+            elif winner(result(board, action)) == "O":
+                return action
+            else:
+                vi, move = max_value(result(board, action))
+        return move
+    else:
+        for action in actions(board):
+            if winner(result(board, action)) == "O":
+                return action
+            elif winner(result(board, action)) == "X":
+                return action
+            else:
+                v, move = max_value(result(board, action))
+            return move
+    
+
+def max_value(board):
+    """
+    Returns the maximizing value for available actions given a board. 
+    """
+    v=float('-inf')
+    move = None
+    if terminal(board):
+        return utility(board), None
+    for action in actions(board):
+        vi, x = min_value(result(board, action))
+        if vi > v:
+            v = vi
+            move = action
+            if v == 1:
+                return v, move
+    return v, move
+
+
+def min_value(board):
+    """
+    Returns the minimizing value for available actions given a board.
+    """
+    v=float('inf')
+    move = None
+    if terminal(board):
+        return  utility(board), None
+    for action in actions(board):
+        vi, x = max_value(result(board, action))
+        if vi < v:
+            v = vi
+            move = action
+            if v == -1:
+                return v, move
+    return v, move
