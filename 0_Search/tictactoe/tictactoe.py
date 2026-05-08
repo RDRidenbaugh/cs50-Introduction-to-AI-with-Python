@@ -54,11 +54,13 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    copy_board=deepcopy(board)
-    if player(board) == "X":
-        copy_board[action[0]][action[1]] = "X"
-    else:
-        copy_board[action[0]][action[1]] = "O"
+    i, j = action
+    if i not in range(3) or j not in range(3):
+        raise IndexError("Invalid action.")
+    if board[i][j] is not EMPTY:
+        raise ValueError("Invalid action.")
+    copy_board = deepcopy(board)
+    copy_board[i][j] = player(board)
     return copy_board
 
 
@@ -193,23 +195,11 @@ def minimax(board):
     if terminal(board):
         return None
     if player(board) == X:
-        for action in actions(board):
-            if winner(result(board, action)) == "X":
-                return action
-            elif winner(result(board, action)) == "O":
-                return action
-            else:
-                vi, move = max_value(result(board, action))
+        v, move = max_value(board)
         return move
     else:
-        for action in actions(board):
-            if winner(result(board, action)) == "O":
-                return action
-            elif winner(result(board, action)) == "X":
-                return action
-            else:
-                v, move = max_value(result(board, action))
-            return move
+        v, move = min_value(board)
+        return move
     
 
 def max_value(board):
