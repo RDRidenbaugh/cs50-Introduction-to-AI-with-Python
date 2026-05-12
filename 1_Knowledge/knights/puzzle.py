@@ -9,11 +9,17 @@ BKnave = Symbol("B is a Knave")
 CKnight = Symbol("C is a Knight")
 CKnave = Symbol("C is a Knave")
 
+universal_knowledge = And(
+    Or(AKnight, AKnave)
+    Not(And(AKnight, AKnave))
+)
+
+print(universal_knowledge.formula())
+
 # Puzzle 0
 # A says "I am both a knight and a knave."
 knowledge0 = And(
     # TODO
-)
 
 # Puzzle 1
 # A says "We are both knaves."
