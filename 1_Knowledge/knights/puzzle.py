@@ -9,31 +9,66 @@ BKnave = Symbol("B is a Knave")
 CKnight = Symbol("C is a Knight")
 CKnave = Symbol("C is a Knave")
 
-universal_knowledge = And(
-    Or(AKnight, AKnave)
+common_knowledge = And(
+    Or(AKnight, AKnave), 
     Not(And(AKnight, AKnave))
 )
-
-print(universal_knowledge.formula())
+# print(common_knowledge.formula())
 
 # Puzzle 0
 # A says "I am both a knight and a knave."
 knowledge0 = And(
-    # TODO
+    common_knowledge, 
+    Implication(AKnight, And(AKnight, AKnave)),
+    Implication(AKnave, Not(And(AKnight, AKnave)))
+)
+
+query0 = And(
+    AKnight, AKnave
+    )
+
+model_check(knowledge0, query0)
+
+print(knowledge0.formula())
 
 # Puzzle 1
 # A says "We are both knaves."
 # B says nothing.
+common_knowledge.add(And(
+    Or(BKnight, BKnave),
+    Not(And(BKnight, BKnave))
+))
+
 knowledge1 = And(
-    # TODO
+    common_knowledge,
+    Implication(AKnight, And(AKnave, BKnave)),
+    Implication(AKnave, Not(And(AKnave, BKnave))),
 )
 
-# Puzzle 2
-# A says "We are the same kind."
-# B says "We are of different kinds."
-knowledge2 = And(
-    # TODO
+query1 = And(
+    AKnave, BKnave
 )
+
+model_check(knowledge1, query1)
+
+# Puzzle 2
+# A says "We are the same kind.",
+# B says "We are of different kinds."
+
+knowledge2 = And(
+    common_knowledge,
+    Implication(AKnight, Or(Biconditional(AKnight, BKnight), Biconditional(AKnave, BKnave))),
+    Implication(AKnave, Not(Or(Biconditional(AKnight, BKnight), Biconditional(AKnave, BKnave)))),
+    Implication(BKnight, Or(Biconditional(AKnight, BKnave), Biconditional(AKnave, BKnight))),
+    Implication(BKnave, Not(Or(Biconditional(AKnight, BKnave), Biconditional(AKnave, BKnight))))
+)
+
+query2 = And(
+    Or(And(AKnight, BKnight), And(AKnave, BKnave)),
+    Or(And(AKnight, BKnave), And(AKnave, BKnight))
+)
+
+model_check(knowledge2, query2)
 
 # Puzzle 3
 # A says either "I am a knight." or "I am a knave.", but you don't know which.
