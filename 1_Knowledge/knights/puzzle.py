@@ -25,7 +25,7 @@ knowledge0 = And(
 
 query0 = And(
     AKnight, AKnave
-    )
+)
 
 model_check(knowledge0, query0)
 
@@ -75,9 +75,28 @@ model_check(knowledge2, query2)
 # B says "A said 'I am a knave'."
 # B says "C is a knave."
 # C says "A is a knight."
+common_knowledge.add(And(
+    Or(CKnight, CKnave),
+    Not(And(CKnight, CKnave))
+))
+
 knowledge3 = And(
-    # TODO
+    common_knowledge,
+    Implication(AKnight, BKnave),
+    Implication(AKnave, Not(BKnave)),
+    Implication(BKnight, And(CKnight, Not(AKnight))),
+    Implication(BKnave, Not(And(CKnight, Not(AKnight)))),
+    Implication(CKnight, AKnight),
+    Implication(CKnave, Not(AKnight))
 )
+
+query3 = And(
+    Or(AKnight, AKnave),
+    BKnave,
+    CKnave
+)
+
+model_check(knowledge3, query3)
 
 
 def main():
